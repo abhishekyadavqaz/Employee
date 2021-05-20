@@ -6,6 +6,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,19 +22,21 @@ public class EmployeeServiceImpl implements EmployeeService {
 
 	@Override
 	@LogExecutionTime
+	@Transactional(isolation = Isolation.DEFAULT, propagation = Propagation.REQUIRED)
 	public EmployeeVo creatEmployee(final EmployeeVo employeeVo) {
 
 		return employeeDao.insertEmployee(employeeVo);
 	}
 
 	@Override
+	@Transactional(isolation = Isolation.DEFAULT, propagation = Propagation.REQUIRED)
 	public List<EmployeeVo> getAllEmployees() {
 
 		return employeeDao.getAllEmployee();
 	}
 
 	@Override
-	@Transactional(propagation = Propagation.REQUIRES_NEW)
+	@Transactional(isolation = Isolation.DEFAULT, propagation = Propagation.REQUIRED)
 	public EmployeeVo updateEmployee(final EmployeeVo employeeVo) {
 
 		final int id = employeeVo.getId();
@@ -43,7 +46,6 @@ public class EmployeeServiceImpl implements EmployeeService {
 		}
 
 		final boolean oldEmployee = employeeDao.getEmployeetbyId(employeeVo.getId());
-		// deleteEmployee(1);
 		if (oldEmployee) {
 
 			return employeeDao.updateEmployee(employeeVo);
@@ -53,6 +55,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 	}
 
 	@Override
+	@Transactional(isolation = Isolation.DEFAULT, propagation = Propagation.REQUIRED)
 	public String deleteEmployee(final int EmployeeId) {
 
 		return employeeDao.deleteEmployee(EmployeeId);
