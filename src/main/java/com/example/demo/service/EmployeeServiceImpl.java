@@ -2,8 +2,6 @@ package com.example.demo.service;
 
 import java.util.List;
 
-//import javax.transaction.Transactional;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Isolation;
@@ -12,6 +10,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.example.demo.aspect.LogExecutionTime;
 import com.example.demo.dao.EmployeeDao;
+import com.example.demo.exceptions.ApiRequestException;
+import com.example.demo.exceptions.CodeError;
 import com.example.demo.vo.EmployeeVo;
 
 @Component
@@ -42,21 +42,24 @@ public class EmployeeServiceImpl implements EmployeeService {
 		final int id = employeeVo.getId();
 
 		if (id <= 0) {
-			return null;
+			throw new ApiRequestException(CodeError.EMPLOYE_NOT_FOUND);
 		}
-
 		final boolean oldEmployee = employeeDao.getEmployeetbyId(employeeVo.getId());
 		if (oldEmployee) {
 
 			return employeeDao.updateEmployee(employeeVo);
 		}
 
-		return null;
+		throw new ApiRequestException(CodeError.EMPLOYE_NOT_FOUND);
 	}
 
 	@Override
 	@Transactional(isolation = Isolation.DEFAULT, propagation = Propagation.REQUIRED)
 	public String deleteEmployee(final int EmployeeId) {
+
+		if (EmployeeId <= 0) {
+			throw new ApiRequestException(CodeError.EMPLOYE_NOT_FOUND);
+		}
 
 		return employeeDao.deleteEmployee(EmployeeId);
 

@@ -1,15 +1,23 @@
 package com.example.demo.exceptions;
 
+import lombok.Getter;
+import lombok.Setter;
+
+@Setter
+@Getter
 public class ApiRequestException extends RuntimeException {
 
-	public ApiRequestException(final String message, final Throwable cause) {
-		super(message, cause);
-		// TODO Auto-generated constructor stub
+	private Code code;
+	private String errorCode;
+	private Exception exception;
+
+	public ApiRequestException(final Code code, final Exception exception) {
+		this.code = code;
+		this.exception = exception;
 	}
 
-	public ApiRequestException(final String message) {
-		super(message);
-		// TODO Auto-generated constructor stub
+	public ApiRequestException(final Code code) {
+		this.code = code;
 	}
 
 }

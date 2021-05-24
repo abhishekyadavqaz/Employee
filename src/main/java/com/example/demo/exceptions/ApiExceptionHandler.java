@@ -1,22 +1,25 @@
 package com.example.demo.exceptions;
 
-import java.time.ZoneId;
-import java.time.ZonedDateTime;
-
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+@RestControllerAdvice
 public class ApiExceptionHandler {
 
 	@ExceptionHandler(value = { ApiRequestException.class })
-	public ResponseEntity<Object> handleApiRequestException(final ApiRequestException e) {
+	@ResponseBody
+	public ResponseEntity<Response> handleApiRequestException(final ApiRequestException exception) {
 
-		final HttpStatus badRequest = HttpStatus.BAD_REQUEST;
+		final var response = new Response();
+		response.setDetail(exception.getCode().getMessage());
+		response.setCode(exception.getErrorCode());
+		response.setMessage(exception.getCode().getCode());
+		response.setException(exception.getException().toString());
+		response.setStatus(HttpStatus.NOT_FOUND);
 
-		final ApiException apiException = new ApiException(e.getMessage(), e, badRequest,
-				ZonedDateTime.now(ZoneId.of("Z")));
-
-		return new ResponseEntity<>(apiException, badRequest);
+		return new ResponseEntity<>(response, response.getStatus());
 	}
 }
