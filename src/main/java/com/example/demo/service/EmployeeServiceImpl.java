@@ -22,23 +22,21 @@ public class EmployeeServiceImpl implements EmployeeService {
 
 	@Override
 	@LogExecutionTime
-	// @Transactional(isolation = Isolation.DEFAULT, propagation =
-	// Propagation.REQUIRED)
+	@Transactional(isolation = Isolation.DEFAULT, propagation = Propagation.REQUIRED)
 	public EmployeeVo creatEmployee(final EmployeeVo employeeVo) {
 
 		return employeeDao.insertEmployee(employeeVo);
 	}
 
 	@Override
-	// @Transactional(isolation = Isolation.DEFAULT, propagation =
-	// Propagation.REQUIRED)
+	@Transactional(isolation = Isolation.DEFAULT, propagation = Propagation.REQUIRED)
 	public List<EmployeeVo> getAllEmployees() {
 
 		return employeeDao.getAllEmployee();
 	}
 
 	@Override
-	// @Transactional(readOnly = true)
+	@Transactional(isolation = Isolation.DEFAULT, propagation = Propagation.REQUIRED)
 	public EmployeeVo updateEmployee(final EmployeeVo employeeVo) {
 
 		final int id = employeeVo.getId();
