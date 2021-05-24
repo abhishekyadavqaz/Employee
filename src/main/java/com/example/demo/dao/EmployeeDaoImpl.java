@@ -7,7 +7,6 @@ import org.springframework.stereotype.Component;
 
 import com.example.demo.repository.EmployeeRepository;
 import com.example.demo.vo.Employee;
-import com.example.demo.vo.EmployeeDetails;
 import com.example.demo.vo.EmployeeVo;
 
 @Component
@@ -18,6 +17,9 @@ public class EmployeeDaoImpl implements EmployeeDao {
 
 	@Autowired
 	private EmployeeMapperDao employeeMapperDao;
+
+	@Autowired
+	private EmployeeFieldMapper employeeFieldMapper;
 
 	@Override
 	public EmployeeVo insertEmployee(final EmployeeVo employeeVo) {
@@ -51,34 +53,39 @@ public class EmployeeDaoImpl implements EmployeeDao {
 		final Employee employee = employeeMapperDao.toEntity(employeeVo);
 
 		final Employee existingEmployee = employeeRepository.findById(Integer.valueOf(employee.getId())).orElse(null);
+		System.out.println("updated    " + existingEmployee.getEmployeeDetails().getId());
 
-		if (employee.getFirstName() != null) {
-			existingEmployee.setFirstName(employee.getFirstName());
-		}
+		final Employee employeec = employeeFieldMapper.copyDtoToEntityExcludeNull(employeeVo, existingEmployee);
 
-		if (employee.getLastName() != null) {
-			existingEmployee.setLastName(employee.getLastName());
-		}
+		System.out.println("updated    " + employeec);
 
-		if (employee.getEmail() != null) {
-			existingEmployee.setEmail(employee.getEmail());
-		}
+//		if (employee.getFirstName() != null) {
+//			existingEmployee.setFirstName(employee.getFirstName());
+//		}
+//
+//		if (employee.getLastName() != null) {
+//			existingEmployee.setLastName(employee.getLastName());
+//		}
+//
+//		if (employee.getEmail() != null) {
+//			existingEmployee.setEmail(employee.getEmail());
+//		}
+//
+//		final EmployeeDetails employeeDetails = employee.getEmployeeDetails();
+//
+//		final EmployeeDetails existingEmployeeDetails = existingEmployee.getEmployeeDetails();
+//
+//		if (employeeDetails.getAge() != 0) {
+//			existingEmployeeDetails.setAge(employeeDetails.getAge());
+//		}
+//
+//		if (employeeDetails.getHobby() != null) {
+//			existingEmployeeDetails.setHobby(employeeDetails.getHobby());
+//		}
+//
+//		existingEmployee.setEmployeeDetails(existingEmployeeDetails);
 
-		final EmployeeDetails employeeDetails = employee.getEmployeeDetails();
-
-		final EmployeeDetails existingEmployeeDetails = existingEmployee.getEmployeeDetails();
-
-		if (employeeDetails.getAge() != 0) {
-			existingEmployeeDetails.setAge(employeeDetails.getAge());
-		}
-
-		if (employeeDetails.getHobby() != null) {
-			existingEmployeeDetails.setHobby(employeeDetails.getHobby());
-		}
-
-		existingEmployee.setEmployeeDetails(existingEmployeeDetails);
-
-		final Employee saveEmployee = employeeRepository.save(existingEmployee);
+		final Employee saveEmployee = employeeRepository.save(employeec);
 
 		return employeeMapperDao.toVo(saveEmployee);
 

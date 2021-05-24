@@ -8,18 +8,15 @@ import lombok.ToString;
 
 @AllArgsConstructor
 @ToString
+@Getter
+@Setter
 @NoArgsConstructor
 public class EmployeeDetailsVo {
 
-	@Getter
 	private int id;
 
-	@Getter
-	@Setter
 	private int age;
 
-	@Getter
-	@Setter
 	private String hobby;
 
 }

@@ -25,6 +25,13 @@ import lombok.Setter;
 @EntityListeners(CustomAudit.class)
 public class EmployeeDetails implements Auditable {
 
+	public EmployeeDetails(final int id, final int age, final String hobby, final Audit audit) {
+		this.id = id;
+		this.age = age;
+		this.hobby = hobby;
+		this.audit = audit;
+	}
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	@Column(name = "id")
