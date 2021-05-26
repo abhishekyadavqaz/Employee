@@ -10,8 +10,10 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.example.demo.entity.Employee;
 import com.example.demo.service.EmployeeService;
 import com.example.demo.vo.EmployeeVo;
 
@@ -25,15 +27,12 @@ public class EmployeeController {
 	@PostMapping("")
 	public EmployeeVo creatEmployee(@RequestBody final EmployeeVo employeeVo) {
 
-		System.out.println("InstructorMapper " + employeeVo);
-
 		return employeeService.creatEmployee(employeeVo);
 	}
 
 	@PatchMapping("")
 	public EmployeeVo updateEmployee(@RequestBody final EmployeeVo employeeVo) {
 
-		System.out.println("InstructorMapper " + employeeVo);
 		return employeeService.updateEmployee(employeeVo);
 	}
 
@@ -48,4 +47,16 @@ public class EmployeeController {
 		return employeeService.getAllEmployees();
 	}
 
+	@GetMapping("/")
+	public List<Employee> setOfEmployee(@RequestParam(value = "limit") final int limit,
+			@RequestParam(value = "offSet") final int offSet) {
+
+		return employeeService.setOfEmployee(limit, offSet);
+	}
+
+	@GetMapping("/name")
+	public List<Employee> getByFirstNameAndLastName(@RequestParam(value = "first") final String first,
+			@RequestParam(value = "last") final String last) {
+		return employeeService.getByFirstAndLast(first, last);
+	}
 }

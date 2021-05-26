@@ -3,10 +3,18 @@ package com.example.demo.dao;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
 
+import com.example.demo.entity.Employee;
+import com.example.demo.exceptions.ApiRequestException;
+import com.example.demo.exceptions.CodeError;
+import com.example.demo.mapper.EmployeeFieldMapper;
+import com.example.demo.mapper.EmployeeMapperDao;
+import com.example.demo.repository.EmployeePagnation;
 import com.example.demo.repository.EmployeeRepository;
-import com.example.demo.vo.Employee;
 import com.example.demo.vo.EmployeeVo;
 
 @Component
@@ -21,12 +29,15 @@ public class EmployeeDaoImpl implements EmployeeDao {
 	@Autowired
 	private EmployeeFieldMapper employeeFieldMapper;
 
+	@Autowired
+	EmployeePagnation pagnationRepository;
+
 	@Override
 	public EmployeeVo insertEmployee(final EmployeeVo employeeVo) {
 
-		final Employee employee = employeeMapperDao.toEntity(employeeVo);
+		final var employee = employeeMapperDao.toEntity(employeeVo);
 
-		final Employee savedEmployee = employeeRepository.save(employee);
+		final var savedEmployee = employeeRepository.save(employee);
 
 		return employeeMapperDao.toVo(savedEmployee);
 	}
@@ -34,9 +45,7 @@ public class EmployeeDaoImpl implements EmployeeDao {
 	@Override
 	public boolean getEmployeetbyId(final int id) {
 
-		final boolean employee = employeeRepository.existsById(Integer.valueOf(id));
-
-		return employee;
+		return employeeRepository.existsById(Integer.valueOf(id));
 	}
 
 	@Override
@@ -50,42 +59,14 @@ public class EmployeeDaoImpl implements EmployeeDao {
 	@Override
 	public EmployeeVo updateEmployee(final EmployeeVo employeeVo) {
 
-		final Employee employee = employeeMapperDao.toEntity(employeeVo);
+		final var employee = employeeMapperDao.toEntity(employeeVo);
 
-		final Employee existingEmployee = employeeRepository.findById(Integer.valueOf(employee.getId())).orElse(null);
-		System.out.println("updated    " + existingEmployee.getEmployeeDetails().getId());
+		final var existingEmployee = employeeRepository.findById(Integer.valueOf(employee.getId()))
+				.orElseThrow(() -> new ApiRequestException(CodeError.EMPLOYE_NOT_FOUND));
 
-		final Employee employeec = employeeFieldMapper.copyDtoToEntityExcludeNull(employeeVo, existingEmployee);
+		final var employeec = employeeFieldMapper.copyDtoToEntityExcludeNull(employeeVo, existingEmployee);
 
-		System.out.println("updated    " + employeec);
-
-//		if (employee.getFirstName() != null) {
-//			existingEmployee.setFirstName(employee.getFirstName());
-//		}
-//
-//		if (employee.getLastName() != null) {
-//			existingEmployee.setLastName(employee.getLastName());
-//		}
-//
-//		if (employee.getEmail() != null) {
-//			existingEmployee.setEmail(employee.getEmail());
-//		}
-//
-//		final EmployeeDetails employeeDetails = employee.getEmployeeDetails();
-//
-//		final EmployeeDetails existingEmployeeDetails = existingEmployee.getEmployeeDetails();
-//
-//		if (employeeDetails.getAge() != 0) {
-//			existingEmployeeDetails.setAge(employeeDetails.getAge());
-//		}
-//
-//		if (employeeDetails.getHobby() != null) {
-//			existingEmployeeDetails.setHobby(employeeDetails.getHobby());
-//		}
-//
-//		existingEmployee.setEmployeeDetails(existingEmployeeDetails);
-
-		final Employee saveEmployee = employeeRepository.save(employeec);
+		final var saveEmployee = employeeRepository.save(employeec);
 
 		return employeeMapperDao.toVo(saveEmployee);
 
@@ -101,6 +82,22 @@ public class EmployeeDaoImpl implements EmployeeDao {
 			return "Employee id : " + employeeId + " Removed";
 		}
 		return "Employee with id : " + employeeId + " is not present";
+	}
+
+	@Override
+	public List<Employee> setOfEmployee(final int offSet, final int limit) {
+
+		final Pageable firstPageWithTwoElements = PageRequest.of(offSet, limit);
+
+		final Page<Employee> allProducts = pagnationRepository.findAll(firstPageWithTwoElements);
+
+		return allProducts.toList();
+	}
+
+	@Override
+	public List<Employee> getByFirstAndLast(final String firstName, final String LastName) {
+
+		return employeeRepository.findByFirstNameAndLastName(firstName, LastName);
 	}
 
 }

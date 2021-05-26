@@ -1,4 +1,4 @@
-package com.example.demo.vo;
+package com.example.demo.entity;
 
 import javax.persistence.Column;
 import javax.persistence.Embedded;
@@ -11,6 +11,11 @@ import javax.persistence.Id;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
+import com.example.demo.audit.Audit;
+import com.example.demo.audit.Auditable;
+import com.example.demo.audit.CustomAudit;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -18,11 +23,11 @@ import lombok.Setter;
 
 @AllArgsConstructor
 @NoArgsConstructor
-@Setter
-@Getter
+
 @Entity
 @Table(name = "employees_details")
 @EntityListeners(CustomAudit.class)
+@JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })
 public class EmployeeDetails implements Auditable {
 
 	public EmployeeDetails(final int id, final int age, final String hobby, final Audit audit) {
@@ -33,19 +38,27 @@ public class EmployeeDetails implements Auditable {
 	}
 
 	@Id
+	@Setter
+	@Getter
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	@Column(name = "id")
 	private int id;
 
+	@Setter
+	@Getter
 	@Column(name = "age")
 	private int age;
 
+	@Setter
+	@Getter
 	@Column(name = "hobby")
 	private String hobby;
 
 	@OneToOne(mappedBy = "employeeDetails", fetch = FetchType.LAZY)
 	private Employee employee;
 
+	@Setter
+	@Getter
 	@Embedded
 	private Audit audit;
 

@@ -1,7 +1,8 @@
-package com.example.demo.vo;
+package com.example.demo.audit;
 
 import java.time.LocalDateTime;
 
+import javax.persistence.Column;
 import javax.persistence.Embeddable;
 
 import lombok.Getter;
@@ -12,15 +13,15 @@ import lombok.Setter;
 @Setter
 public class Audit {
 
-	// @Column(name = "created_by")
+	@Column(name = "created_by")
 	private String createdBy;
 
-	// @Column(name = "created_timestamp")
+	@Column(name = "created_timestamp")
 	private LocalDateTime createdTimestamp;
 
-	// @Column(name = "last_updated_by")
+	@Column(name = "last_updated_by")
 	private String lastUpdatedBy;
 
-	// @Column(name = "last_updated_timestamp")
+	@Column(name = "last_updated_timestamp")
 	private LocalDateTime lastUpdatedTimestamp;
 }

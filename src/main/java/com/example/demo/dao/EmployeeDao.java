@@ -2,6 +2,7 @@ package com.example.demo.dao;
 
 import java.util.List;
 
+import com.example.demo.entity.Employee;
 import com.example.demo.vo.EmployeeVo;
 
 public interface EmployeeDao {
@@ -15,5 +16,9 @@ public interface EmployeeDao {
 	EmployeeVo updateEmployee(EmployeeVo employeeVo);
 
 	String deleteEmployee(int employeeId);
+
+	List<Employee> setOfEmployee(int limit, int offset);
+
+	List<Employee> getByFirstAndLast(String firstName, String LastName);
 
 }

@@ -1,4 +1,4 @@
-package com.example.demo.dao;
+package com.example.demo.mapper;
 
 import org.mapstruct.BeanMapping;
 import org.mapstruct.Mapper;
@@ -7,7 +7,7 @@ import org.mapstruct.NullValueCheckStrategy;
 import org.mapstruct.NullValuePropertyMappingStrategy;
 import org.springframework.stereotype.Component;
 
-import com.example.demo.vo.EmployeeDetails;
+import com.example.demo.entity.EmployeeDetails;
 import com.example.demo.vo.EmployeeDetailsVo;
 
 @Component

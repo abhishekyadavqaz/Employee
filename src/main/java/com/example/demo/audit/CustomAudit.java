@@ -1,4 +1,4 @@
-package com.example.demo.vo;
+package com.example.demo.audit;
 
 import java.time.LocalDateTime;
 
@@ -10,14 +10,14 @@ public class CustomAudit {
 	@PrePersist
 	void preCreate(final Auditable auditable) {
 
-		Audit audit = auditable.getAudit();
+		var audit = auditable.getAudit();
 
 		if (audit == null) {
 			audit = new Audit();
 			auditable.setAudit(audit);
 		}
 
-		final LocalDateTime now = LocalDateTime.now();
+		final var now = LocalDateTime.now();
 
 		audit.setCreatedTimestamp(now);
 		audit.setLastUpdatedTimestamp(now);
@@ -29,9 +29,9 @@ public class CustomAudit {
 
 	@PreUpdate
 	void preUpdate(final Auditable auditable) {
-		final LocalDateTime now = LocalDateTime.now();
+		final var now = LocalDateTime.now();
 
-		final Audit audit = auditable.getAudit();
+		final var audit = auditable.getAudit();
 
 		audit.setLastUpdatedTimestamp(now);
 

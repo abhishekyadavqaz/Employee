@@ -1,11 +1,13 @@
 package com.example.demo.exceptions;
 
 import lombok.AllArgsConstructor;
+import lombok.Getter;
 
+@Getter
 @AllArgsConstructor
 public enum CodeError implements Code {
 
-	EMPLOYE_NOT_FOUND("No Employee With This Id");
+	EMPLOYE_NOT_FOUND("No Employee With This Id"), NUMBER_LESS_THEN_ZERO("Number Should Not Be Less Then Zero");
 
 	String message;
 
@@ -19,12 +21,6 @@ public enum CodeError implements Code {
 	public int getStatusCode() {
 
 		return 200;
-	}
-
-	@Override
-	public String getMessage() {
-
-		return this.message;
 	}
 
 }

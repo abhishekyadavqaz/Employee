@@ -1,4 +1,4 @@
-package com.example.demo.vo;
+package com.example.demo.entity;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -12,6 +12,11 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+
+import com.example.demo.audit.Audit;
+import com.example.demo.audit.Auditable;
+import com.example.demo.audit.CustomAudit;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -27,6 +32,7 @@ import lombok.ToString;
 @Getter
 @Table(name = "employees")
 @EntityListeners(CustomAudit.class)
+@JsonIgnoreProperties({ "hibernateLazyInitializer", "handler" })
 public class Employee implements Auditable {
 
 	public Employee(final String firstName, final String lastName, final String email, final int detaild) {
@@ -60,8 +66,5 @@ public class Employee implements Auditable {
 
 	@Embedded
 	private Audit audit;
-
-	// @JoinColumn(name = "employee_details_id", referencedColumnName = "id",
-	// insertable = false, updatable = false)
 
 }

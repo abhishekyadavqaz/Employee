@@ -1,10 +1,10 @@
-package com.example.demo.dao;
+package com.example.demo.mapper;
 
 import java.util.List;
 
 import org.mapstruct.Mapper;
 
-import com.example.demo.vo.Employee;
+import com.example.demo.entity.Employee;
 import com.example.demo.vo.EmployeeVo;
 
 @Mapper(componentModel = "spring", uses = EmployeeDetailsMapperDao.class)
